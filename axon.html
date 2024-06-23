@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXON</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .input-field {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .input-field label {
+            margin-right: 10px;
+        }
+        .input-field input {
+            flex: 1;
+        }
+        #results {
+            margin-top: 20px;
+        }
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <center><h1>Axon</h1></center>
+        <p>Enter your football picks below:</p>
+        <!-- Numbered input fields -->
+        <div class="input-field">
+            <label for="pick1">1. </label>
+            <input type="text" id="pick1">
+        </div>
+        <div class="input-field">
+            <label for="pick2">2. </label>
+            <input type="text" id="pick2">
+        </div>
+        <!-- Repeat for picks 3-10 -->
+        <div class="input-field">
+            <label for="pick3">3. </label>
+            <input type="text" id="pick3">
+        </div>
+        <div class="input-field">
+            <label for="pick4">4. </label>
+            <input type="text" id="pick4">
+        </div>
+        <div class="input-field">
+            <label for="pick5">5. </label>
+            <input type="text" id="pick5">
+        </div>
+        <div class="input-field">
+            <label for="pick6">6. </label>
+            <input type="text" id="pick6">
+        </div>
+        <div class="input-field">
+            <label for="pick7">7. </label>
+            <input type="text" id="pick7">
+        </div>
+        <div class="input-field">
+            <label for="pick8">8. </label>
+            <input type="text" id="pick8">
+        </div>
+        <div class="input-field">
+            <label for="pick9">9. </label>
+            <input type="text" id="pick9">
+        </div>
+        <div class="input-field">
+            <label for="pick10">10. </label>
+            <input type="text" id="pick10">
+        </div><br>
+        <!-- ... Repeat for picks 4-10 -->
+       <center> <button onclick="generateRandomPicks()" id='gen' >Generate</button></center>
+        <div id="results"></div>
+    </div>
+
+    <!-- Popup for random picks -->
+    <div id="popup" class="popup" style="display: none;">
+        <button id='close' onclick='unshow()'>X</button>
+        <h2>Randomly Selected Picks:</h2>
+        <ul id="randomPicks"></ul>
+    </div>
+    <style> 
+    #close{
+    background-color:red;
+    position:relative;
+    left:-10px
+    }
+    #gen{
+     background-color:green;
+     border-radius:35%;
+     font-size:16px;
+}
+    </style>
+    <script>
+        // Save picks to local storage
+        function savePicks() {
+            const picks = [];
+            for (let i = 1; i <= 10; i++) {
+                const pick = document.getElementById(`pick${i}`).value;
+                if (pick) {
+                    picks.push(pick);
+                }
+            }
+            localStorage.setItem('footballPicks', JSON.stringify(picks));
+        }
+
+        // Generate random picks
+        function generateRandomPicks() {
+            savePicks()
+            const picks = JSON.parse(localStorage.getItem('footballPicks'));
+            if (picks.length >= 3) {
+                const randomPicks = getRandomPicks(picks, 3);
+                displayPopup(randomPicks);
+            } else {
+                alert('Enter at least 3 picks to generate random picks.');
+            }
+        }
+
+        // Get random picks
+        function getRandomPicks(picksArray, count) {
+            const shuffledPicks = picksArray.sort(() => 0.5 - Math.random());
+            return shuffledPicks.slice(0, count);
+        }
+
+        // Display random picks in a popup
+        function displayPopup(randomPicks) {
+            const popup = document.getElementById('popup');
+            const randomPicksList = document.getElementById('randomPicks');
+            randomPicksList.innerHTML = randomPicks.map(pick => `<li>${pick}</li>`).join('');
+            popup.style.display = 'block';
+        }
+        
+        function unshow(){
+        const popup = document.getElementById('popup');
+        popup.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+
